@@ -3,6 +3,7 @@ package com.hemanth.registrationform.controllers;
 import ch.qos.logback.core.model.Model;
 import com.hemanth.registrationform.models.Student;
 import com.hemanth.registrationform.repositories.StudentRepository;
+import com.hemanth.registrationform.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.yaml.snakeyaml.events.Event;
@@ -12,8 +13,7 @@ import java.util.List;
 @RestController
 public class RegistrationController {
     @Autowired
-    private StudentRepository studentRepository;
-
+    private StudentService studentService;
     @GetMapping("/hello")
     public String hello() {
         return "welcome to the registration form app";
@@ -53,36 +53,31 @@ public class RegistrationController {
 
     @PostMapping("/savestudent")
     public Student saveStudent(@ModelAttribute Student student) {
-        studentRepository.save(student);
-        return student;
+
+        return studentService.save(student);
 
 
     }
 
     @GetMapping("/students/all")
     public List<Student> getstudents() {
-        return studentRepository.findAll();
+        return studentService.getAllStudents();
 
     }
 
     @GetMapping("/students/{id}")
     public Student getStudentById(@PathVariable Long id) {
 
-        return studentRepository.findById(id).get();
+        return studentService.getStudentById(id);
     }
     @PostMapping("/students/update")
     public Student updateStudent(@RequestBody Student student){
-        studentRepository.save(student);
-
-        return student;
+       return studentService.save(student);
     }
     @PostMapping("/students/updateall")
-    public List<Student> updateallstudent(@RequestBody List<Student> students ){
-        studentRepository.saveAll(students);
-        return students;
+    public List<Student> updateAll(@RequestBody List<Student> students ){
+       return studentService.saveAll(students);
     }
-
-
 
 
 
